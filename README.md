@@ -1,37 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍽️ Restaurant System Web V1
 
-## Getting Started
+A full-featured restaurant web system built with **Next.js**, **Prisma**, and **SQL**. This application allows users to browse restaurants and menus, make reservations and online orders, and scan QR codes for table-side ordering. Admins can manage content, orders, and feedback via a secure dashboard.
 
-First, run the development server:
+---
+
+## 📌 Features
+
+### 👥 Customer-Facing Features
+- Browse restaurants and real-time menus
+- Make online orders with live availability
+- Reserve tables (free or paid based on minimum order)
+- Track orders (Accepted → Preparing → Ready → Delivered)
+- Scan QR code for contactless table ordering
+- View promotions, loyalty programs, and use gift cards
+- Multi-currency payments: LKR, USD, GBP, EUR, AUD
+- Payment support: Card, Bank (HelaPay, LankaPay), Mobile wallets (Frimi, iPay, Genie)
+
+### 🛠️ Admin Panel Features
+- Manage homepage content, menus, and media
+- Approve/reject pre-orders and reservations
+- Track and update order statuses
+- View and moderate feedback
+- Assign waiters based on table zones and load
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer             | Tech                             |
+|------------------|----------------------------------|
+| Frontend         | Next.js, Tailwind CSS            |
+| Backend          | Next.js API Routes / Express     |
+| ORM / DB         | Prisma, PostgreSQL or MySQL      |
+| Auth             | NextAuth or JWT                  |
+| Realtime         | WebSockets / Socket.IO (for KDS) |
+| QR Integration   | Dynamic QR Codes via Routing     |
+| Payment Gateway  | Stripe / Custom Gateway API      |
+
+---
+
+## 🧩 Modules Overview
+
+### QR Code Table Ordering
+- Each table has a QR: `/qr?table=01`
+- Scanning opens today’s live menu
+- Customer places order → sent to kitchen
+- Waiter is auto-assigned
+- Order status updates in real time
+
+### Pre-Reservation Workflow
+- Customer checks availability by date/time
+- Free reservation if minimum order is met
+- Paid reservation otherwise
+- Multi-stage reminders (1 day, 2 hrs, 30 mins)
+
+### Order Now Flow
+- Select date/time, restaurant, and dishes
+- Choose dine-in/collect/delivery
+- Preview bill and pay
+- Realtime kitchen + admin notification
+
+---
+
+## 🔒 Security Features
+- Encrypted QR codes with signed table IDs
+- Admin login protection with rate limits
+- SQL Injection and XSS prevention via Prisma
+- GPS boundary (optional) for QR order validation
+
+---
+
+## 🔧 Local Development Setup
+
+### 1. Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Restaurant-System
+git clone https://github.com/your-org/restaurant-system-web.git
+cd restaurant-system-web
