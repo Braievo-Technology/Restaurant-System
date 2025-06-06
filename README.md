@@ -70,7 +70,29 @@ A full-featured restaurant web system built with **Next.js**, **Prisma**, and **
 
 ---
 
-## 🔧 Local Development Setup
+
+
+## 🌿 Branch Naming Convention
+
+To maintain a clean and organized git history, all branches should follow the naming convention below:
+
+
+### 🔧 Allowed Types
+- `feature` – New features or functionality
+- `bugfix` – Fixing a bug or issue
+- `hotfix` – Urgent fixes that go directly to production
+- `chore` – Routine tasks (e.g., updating dependencies)
+- `refactor` – Code improvements without changing functionality
+- `test` – Adding or improving tests
+- `doc` – Documentation updates
+- `task` – Generic task that doesn't fit other categories (e.g., research, setup, planning)
+
+
+
+
+
+
+
 
 ### 1. Clone the Repository
 
