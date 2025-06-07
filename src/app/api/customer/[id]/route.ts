@@ -1,58 +1,47 @@
-// api/customer/[id]/route.ts
-
 import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+// GET a single customer by ID
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+    const id = parseInt(params.id);
     const customer = await prisma.customer.findUnique({
-        where: { id: parseInt(params.id) },
-        include: {
-            user: true,
-            reservations: true,
-            orders: true,
-            giftCards: true,
-            loyalty: true,
-        },
+        where: { id },
+        include: { loyalty: true, reservations: true, orders: true },
     });
 
-    if (!customer) return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+    if (!customer) {
+        return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+    }
 
     return NextResponse.json(customer);
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+// PUT update a customer by ID
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+    const id = parseInt(params.id);
     const data = await req.json();
-    const id = parseInt(params.id);
 
-    const customer = await prisma.customer.update({
-        where: { id },
-        data: {
-            user: {
-                update: {
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    email: data.email,
-                    address: data.address,
-                    idCard: data.idCard,
-                    phoneNumber: data.phoneNumber,
-                },
-            },
-        },
-        include: { user: true },
-    });
-
-    return NextResponse.json(customer);
+    try {
+        const updatedCustomer = await prisma.customer.update({
+            where: { id },
+            data,
+        });
+        return NextResponse.json(updatedCustomer);
+    } catch (error) {
+        return NextResponse.json({ error: 'Update failed' }, { status: 500 });
+    }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+// DELETE a customer by ID
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     const id = parseInt(params.id);
 
-    // First delete Customer (has FK to User)
-    await prisma.customer.delete({
-        where: { id },
-    });
-
-    return NextResponse.json({ message: 'Customer deleted' });
+    try {
+        await prisma.customer.delete({ where: { id } });
+        return NextResponse.json({ message: 'Customer deleted' });
+    } catch (error) {
+        return NextResponse.json({ error: 'Delete failed' }, { status: 500 });
+    }
 }

@@ -1,34 +1,23 @@
-// api/customer/route.ts
-
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
+// GET all customers
 export async function GET() {
     const customers = await prisma.customer.findMany({
-        include: { user: true, orders: true, reservations: true },
+        include: { loyalty: true, reservations: true, orders: true },
     });
     return NextResponse.json(customers);
 }
 
-export async function POST(req: Request) {
-    const data = await req.json();
-
-    const user = await prisma.user.create({
-        data: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            address: data.address,
-            idCard: data.idCard,
-            phoneNumber: data.phoneNumber,
-            customer: {
-                create: {}, // Creates linked Customer row
-            },
-        },
-        include: { customer: true },
-    });
-
-    return NextResponse.json(user);
+// POST create a new customer
+export async function POST(request: Request) {
+    const data = await request.json();
+    try {
+        const newCustomer = await prisma.customer.create({ data });
+        return NextResponse.json(newCustomer, { status: 201 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Customer creation failed' }, { status: 500 });
+    }
 }
