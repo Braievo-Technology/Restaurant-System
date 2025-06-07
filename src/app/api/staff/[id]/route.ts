@@ -1,44 +1,46 @@
+// /app/api/staff/[id]/route.ts
 import { PrismaClient } from '@prisma/client';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-// GET staff member by ID
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    const id = parseInt(params.id);
-    const staff = await prisma.staff.findUnique({ where: { id } });
-
-    if (!staff) {
-        return NextResponse.json({ error: 'Staff not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(staff);
-}
-
-// PUT update staff member by ID
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-    const id = parseInt(params.id);
-    const data = await req.json();
-
+export async function GET(_: Request, { params }: { params: { id: string } }) {
     try {
-        const updatedStaff = await prisma.staff.update({
-            where: { id },
-            data,
+        const staff = await prisma.staff.findUnique({
+            where: { id: parseInt(params.id) },
+            include: { assignedTables: { include: { table: true } } }
         });
-        return NextResponse.json(updatedStaff);
+
+        if (!staff) {
+            return NextResponse.json({ error: 'Staff not found' }, { status: 404 });
+        }
+
+        return NextResponse.json(staff);
     } catch (error) {
-        return NextResponse.json({ error: 'Staff update failed' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to fetch staff' }, { status: 500 });
     }
 }
 
-// DELETE staff member by ID
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-    const id = parseInt(params.id);
-
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
     try {
-        await prisma.staff.delete({ where: { id } });
-        return NextResponse.json({ message: 'Staff deleted successfully' });
+        const body = await req.json();
+        const updated = await prisma.staff.update({
+            where: { id: parseInt(params.id) },
+            data: body,
+        });
+        return NextResponse.json(updated);
     } catch (error) {
-        return NextResponse.json({ error: 'Staff deletion failed' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to update staff' }, { status: 500 });
+    }
+}
+
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+    try {
+        await prisma.staff.delete({
+            where: { id: parseInt(params.id) },
+        });
+        return NextResponse.json({ message: 'Staff deleted' });
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to delete staff' }, { status: 500 });
     }
 }
