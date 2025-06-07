@@ -1,16 +1,15 @@
+// app/api/order/[id]/route.ts
 import { PrismaClient,  } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 
 const prisma = new PrismaClient();
 
-// GET order by ID
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-    const id = Number(params.id);
-
+export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
     try {
         const order = await prisma.order.findUnique({
-            where: { id },
+            where: { id: Number(params.id) },
             include: {
+                items: true,
                 customer: true,
                 giftCardUsage: true,
                 kitchenDisplay: true,
@@ -27,35 +26,36 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-// PUT update order by ID
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-    const id = Number(params.id);
-    const data = await request.json();
+export async function PUT(
+    req: NextRequest,
+    context: { params: { id: string } }
+) {
+    const { id } = context.params; // ✅ Correctly destructure params here
+    const data = await req.json();
 
-    try {
-        const updatedOrder = await prisma.order.update({
-            where: { id },
-            data: {
-                date: data.date ? new Date(data.date) : undefined,
-                totalAmount: data.totalAmount,
-                status: data.status,
-                customerId: data.customerId,
-            },
-        });
+    const updatedFood = await prisma.food.update({
+        where: { id: parseInt(id) },
+        data: {
+            name: data.name,
+            description: data.description,
+            portion: data.portion,
+            available: data.available,
+            priceSmall: data.priceSmall,
+            priceMedium: data.priceMedium,
+            priceLarge: data.priceLarge,
+        },
+    });
 
-        return NextResponse.json(updatedOrder);
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
-    }
+    return NextResponse.json(updatedFood);
 }
 
-// DELETE order by ID
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-    const id = Number(params.id);
-
+export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
     try {
-        await prisma.order.delete({ where: { id } });
-        return NextResponse.json({ message: 'Order deleted' });
+        await prisma.order.delete({
+            where: { id: Number(params.id) },
+        });
+
+        return NextResponse.json({ message: 'Order deleted successfully' });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to delete order' }, { status: 500 });
     }

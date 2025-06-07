@@ -1,13 +1,14 @@
-import { PrismaClient, OrderStatus } from '@prisma/client';
-import { NextResponse } from 'next/server';
+// app/api/order/[id]/route.ts
+import { PrismaClient,  } from '@prisma/client';
+import { NextResponse} from 'next/server';
 
 const prisma = new PrismaClient();
 
-// GET all orders
 export async function GET() {
     try {
         const orders = await prisma.order.findMany({
             include: {
+                items: true,
                 customer: true,
                 giftCardUsage: true,
                 kitchenDisplay: true,
@@ -19,30 +20,61 @@ export async function GET() {
     }
 }
 
-// POST create new order
-export async function POST(request: Request) {
+export async function POST(req: Request) {
     try {
-        const data = await request.json();
+        const body = await req.json();
+        const {
+            date,
+            totalAmount,
+            status,
+            customerId,
+            items,
+            giftCardId,
+            giftCardAmount,
+            kitchenDisplay,
+        } = body;
 
-        // Example expected data:
-        // {
-        //   date?: string,
-        //   totalAmount: number,
-        //   status?: "PENDING" | "PREPARING" | "READY" | "COMPLETED" | "CANCELLED",
-        //   customerId: number
-        // }
-
-        const newOrder = await prisma.order.create({
+        const order = await prisma.order.create({
             data: {
-                date: data.date ? new Date(data.date) : undefined,
-                totalAmount: data.totalAmount,
-                status: data.status ?? OrderStatus.PENDING,
-                customerId: data.customerId,
+                date: date ? new Date(date) : undefined,
+                totalAmount,
+                status,
+                customer: { connect: { id: customerId } },
+                items: {
+                    create: items.map((item: any) => ({
+                        foodName: item.foodName,
+                        quantity: item.quantity,
+                        unitPrice: item.unitPrice,
+                    })),
+                },
+                giftCardUsage: giftCardId
+                    ? {
+                        create: {
+                            giftCard: { connect: { id: giftCardId } },
+                            usedAmount: giftCardAmount,
+                        },
+                    }
+                    : undefined,
+                kitchenDisplay: kitchenDisplay
+                    ? {
+                        create: {
+                            status: kitchenDisplay.status,
+                            priority: kitchenDisplay.priority,
+                            notes: kitchenDisplay.notes,
+                        },
+                    }
+                    : undefined,
+            },
+            include: {
+                items: true,
+                giftCardUsage: true,
+                kitchenDisplay: true,
             },
         });
 
-        return NextResponse.json(newOrder, { status: 201 });
+        return NextResponse.json(order);
     } catch (error) {
+        console.error(error);
         return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
     }
 }
