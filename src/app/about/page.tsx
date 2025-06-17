@@ -4,6 +4,7 @@ import React from 'react';
 import SectionTitle from '../components/ui/SectionTitle';
 import ChefCard from '../components/ui/ChefCard';
 import ContactButton from '../components/ui/Button';
+import Footer from '../components/layout/Footer';
 
 interface Step {
   title: string;
@@ -209,6 +210,11 @@ const HeroSection: React.FC = () => {
           </h2>
           <ContactButton onClick={handleContactClick} text="CONTACT US" ariaLabel="Contact Us" />
         </div>
+      </section>
+
+
+      <section>
+        <Footer />
       </section>
     </>
   );
