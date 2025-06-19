@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-interface ContactButtonProps {
+interface MainButtonProps {
   text?: string;
   onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
   ariaLabel?: string;
 }
 
-const ContactButton: React.FC<ContactButtonProps> = ({
-  text = "CONTACT US",
+const MainButton: React.FC<MainButtonProps> = ({
+  text,
   onClick,
-  ariaLabel = "Contact Us",
+  ariaLabel,
 }) => {
   return (
     <div className="inline-flex flex-col items-center group relative">
@@ -32,4 +32,4 @@ const ContactButton: React.FC<ContactButtonProps> = ({
   );
 };
 
-export default ContactButton;
+export default MainButton;
