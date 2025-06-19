@@ -13,7 +13,6 @@ const Card: React.FC<CardProps> = ({
   image,
   title,
   description,
-  buttonText,
 }) => {
   return (
     <div
