@@ -12,7 +12,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center justify-center gap-6 px-4 w-full ${className}`}
+      className={`flex items-center justify-center gap-6 px-4 w-full mb-25 ${className}`}
       data-id={dataId}
     >
       <div
@@ -23,7 +23,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
         }}
       />
       <h2
-        className="text-center text-[#CA9C5E] whitespace-nowrap"
+        className="text-center text-[#CA9C5E] whitespace-nowrap "
         style={{
           fontFamily: "Adamina, serif",
           fontSize: "clamp(1.5rem, 4vw, 2.25rem)",
