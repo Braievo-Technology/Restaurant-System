@@ -2,7 +2,7 @@ import React from "react";
 
 interface MainButtonProps {
   text?: string;
-  onClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
   ariaLabel?: string;
 }
 
