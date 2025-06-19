@@ -28,16 +28,18 @@ const Header: React.FC<HeaderProps> = ({ dataId }) => {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <div className="text-xl font-bold text-white">Logo</div>
         <nav className="flex gap-8">
-          {["Home", "Our menu", "Reservation", "Contact"].map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
-              className="group relative text-sm text-white"
-            >
-              {item}
-              <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-white transition-all duration-300 group-hover:w-full" />
-            </a>
-          ))}
+          {["Home", "Our menu", "Order now", "Reservation", "Contact"].map(
+            (item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
+                className="group relative text-sm text-white"
+              >
+                {item}
+                <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-white transition-all duration-300 group-hover:w-full" />
+              </a>
+            )
+          )}
         </nav>
       </div>
     </header>
