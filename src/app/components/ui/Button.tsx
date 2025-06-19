@@ -12,9 +12,9 @@ const ContactButton: React.FC<ContactButtonProps> = ({
   ariaLabel = "Contact Us",
 }) => {
   return (
-    <div className="inline-flex flex-col items-center">
+    <div className="inline-flex flex-col items-center group relative">
       {/* Top Divider Line */}
-      <div className="w-30 sm:w-35 md:w-42 h-px bg-[#B08D57] mb-2" />
+      <div className="w-30 sm:w-35 md:w-42 h-px bg-[#B08D57] mb-2 transform transition-all duration-300 group-hover:translate-y-1" />
 
       {/* Contact Link */}
       <a
@@ -27,7 +27,7 @@ const ContactButton: React.FC<ContactButtonProps> = ({
       </a>
 
       {/* Bottom Divider Line */}
-      <div className="w-30 sm:w-35 md:w-42 h-px bg-[#B08D57] mt-2" />
+      <div className="w-30 sm:w-35 md:w-42 h-px bg-[#B08D57] mt-2 transform transition-all duration-300 group-hover:-translate-y-1" />
     </div>
   );
 };
