@@ -1,63 +1,55 @@
-import React from "react";
-import Image from "next/image";
-import MainButton from "./Button";
+import React from 'react';
+import { FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
-interface CardProps {
-  image: string;
-  title: string;
-  description: string;
-  buttonText: string;
-}
-
-const Card: React.FC<CardProps> = ({
-  image,
-  title,
-  description,
-  buttonText,
-}) => {
+const ChefCard = ({ name, imageUrl, socials }) => {
   return (
     <div
-      className="bg-[#112225] rounded-tl-[100px] rounded-br-[100px] w-[278px] h-[390px] flex flex-col items-center justify-between pt-32 pb-8 px-4 text-center relative
-    transition-transform duration-500 ease-in-out
-    hover:bg-[#1E2F33]
-    hover:shadow-2xl
-    hover:scale-[1.05]"
-      style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
+      className="relative w-64 h-96 sm:w-72 sm:h-[26rem] rounded-xl overflow-hidden shadow-2xl 
+                 bg-cover bg-center group transform transition-all duration-300 hover:scale-105"
+      style={{ backgroundImage: `url(${imageUrl})` }}
     >
-      {/* Circular top image */}
-      <div className="absolute -top-25 flex justify-center w-full">
-        <Image
-          src={image}
-          alt={title}
-          width={150}
-          height={150}
-          className="rounded-full w-[220px] h-[220px] object-cover"
-        />
-      </div>
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#CA9C5E]/80 via-[#CA9C5E]/40 to-transparent opacity-100 group-hover:from-black/90 group-hover:via-black/50 transition-opacity duration-300" />
 
-      {/* Title & Description */}
-      <div className="mt-[26px]">
-        {" "}
-        {/* 32px gap from image bottom */}
-        <h3
-          className="text-white text-[24px]  mb-2"
-          style={{
-            fontFamily: "Rasa",
-          }}
-        >
-          {title}
-        </h3>
-        <p className="text-gray-300 text-[14px] leading-relaxed px-2">
-          {description}
-        </p>
-      </div>
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-6 text-white">
+        <h3 className="text-2xl font-thin font-serif mb-3 drop-shadow-md">{name}</h3>
 
-      {/* Button */}
-      <div className="flex flex-col items-center">
-        <MainButton text="VIEW MENU" ariaLabel="View Menu" />
+        <div className="flex justify-center space-x-4">
+          {socials.facebook && (
+            <a
+              href={socials.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white transition-colors duration-200"
+            >
+              <FaFacebook className="w-6 h-6" />
+            </a>
+          )}
+          {socials.instagram && (
+            <a
+              href={socials.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white transition-colors duration-200"
+            >
+              <FaInstagram className="w-6 h-6" />
+            </a>
+          )}
+          {socials.linkedin && (
+            <a
+              href={socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white transition-colors duration-200"
+            >
+              <FaLinkedin className="w-6 h-6" />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Card;
+export default ChefCard;
